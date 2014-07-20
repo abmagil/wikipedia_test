@@ -9,7 +9,10 @@ html
     script(src="http://d3js.org/d3.v3.min.js")
     link(rel='stylesheet', href='/stylesheets/circles.css')
   body
-    block content
+    .col-sm-9
+        block content
+    .col-sm-3#sidebar
+        block sidebar
     script(src="/socket.io/socket.io.js")
     script(src="http://code.jquery.com/jquery-1.11.1.js")
     block scripts
