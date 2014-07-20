@@ -1,0 +1,9 @@
+{
+  "name": "d3-and-wikipedia",
+  "version": "0.0.1",
+  "description": "Six Degrees of Wikipedia",
+  "dependencies": {
+    "jade": "*",
+    "express": "3.4.8"
+  }
+}
