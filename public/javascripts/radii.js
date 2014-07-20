@@ -11,4 +11,4 @@ target = svg.append('g')
 target.selectAll('circle')
     .data(radii)
   .enter().append('circle')
-    .attr('r', function(d) {return d;});
+    .attr('r', function(d) {console.log(d);return d;});

@@ -4,6 +4,7 @@
   "description": "Six Degrees of Wikipedia",
   "dependencies": {
     "jade": "*",
-    "express": "3.4.8"
+    "express": "^4.6.1",
+    "socket.io": "~1.0.6"
   }
 }
