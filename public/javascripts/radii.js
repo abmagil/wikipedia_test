@@ -9,7 +9,7 @@ svg = d3.select("body").append('svg')
 bbox = svg[0][0].getBoundingClientRect();
 // Path generator
 var circle = d3.svg.arc()
-              .innerRadius(function(d) {console.log(d);return d})
+              .innerRadius(function(d) {return d})
               .outerRadius(bbox.width / 2)
               .startAngle(0)
               .endAngle(Math.PI);
@@ -19,16 +19,19 @@ var target = svg.append('g')
 
 
 $("body").on("click", function() {
-    socket.emit("need data");
-})
+    socket.emit("need data", "JSON");
+});
 socket.on("new data", function(r) {
-    radii = r;
-    console.log(r);
-    target.append("path")
-      .attr("d", circle(radii))
-      .attr("stroke", "blue")
-      .attr("stroke-width", 2)
-      .attr("fill", "none");
+    data = JSON.parse(r)
+    if (data["query"]) {
+      console.log(data);
+      radii = data["query"]["backlinks"].length;
+      target.append("path")
+        .attr("d", circle(radii))
+        .attr("stroke", "blue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+    }
 });
 
  
