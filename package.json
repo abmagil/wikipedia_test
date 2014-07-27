@@ -6,6 +6,7 @@
     "express": "^4.6.1",
     "jade": "*",
     "request": "^2.37.0",
-    "socket.io": "~1.0.6"
+    "socket.io": "~1.0.6",
+    "wikipedia-js": "0.0.6"
   }
 }

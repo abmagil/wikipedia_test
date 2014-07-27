@@ -1,5 +1,6 @@
 var request = require('request');
 var querystring = require('querystring');
+var wp = require('wikipedia-js');
 
 var getLinkBacks = function(title, blcontinue, fn) {
   var root = "http://en.wikipedia.org/w/api.php?";
@@ -27,6 +28,19 @@ var getLinkBacks = function(title, blcontinue, fn) {
   });
 };
 
+var getArticle = function(query, fn) {
+  console.log("finding article: " + query);
+  var options = {query: query, format: "html", summaryOnly: true, section: 0};
+    wp.searchArticle(options, function(err, htmlWikiText){
+      if(err){
+        console.log("An error occurred[query=%s, error=%s]", query, err);
+        return;
+      }
+      fn(htmlWikiText);
+    });
+};
+
 module.exports = {
   getLinkBacks: getLinkBacks,
+  getArticle: getArticle
 }

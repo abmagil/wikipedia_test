@@ -3,12 +3,19 @@ extends layout
 block content
     
 block sidebar
+  h1 Find your article!
   .row
     .col-sm-12
-      form.form-inline(action="")
+      form.form-horizontal
         .form-group
-          input#article
-          button.btn.btn-primary Find
-
+          label.col-sm-4.control-label Article Title
+          .col-sm-8
+            input#article_name
+        .form-group
+          .col-sm-8.col-sm-offset-4
+            button.btn.btn-primary Find
+            button.btn.btn-success.hidden Go!
+  .row
+    .col-sm-12#article_text
 block scripts
   script(src='javascripts/radii.js')

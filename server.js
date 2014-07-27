@@ -25,6 +25,11 @@ io.on('connection', function(socket){
       socket.emit("new data", content)
     });
   });
+  socket.on('get article', function(msg) {
+    wikipedia.getArticle(msg, function(content) {
+      socket.emit("found article", content);
+    })
+  });
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
