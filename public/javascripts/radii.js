@@ -3,7 +3,7 @@ var socket = io();
 var bbox, radii, svg, target;
               
 // Create svg container     
-svg = d3.select("body").append('svg')
+svg = d3.select("#main").append('svg')
         .attr("height", 600)
         .attr("width", 600);
 bbox = svg[0][0].getBoundingClientRect();
@@ -18,8 +18,10 @@ var target = svg.append('g')
     .attr('transform', "translate(" + (bbox.width / 2) + "," + (bbox.height / 2) + ")");
 
 
-$("body").on("click", function() {
-    socket.emit("need data", "JSON");
+$("form").on("submit", function() {
+    socket.emit("need data", $("#article").val());
+    $('#m').val('');
+    return false;
 });
 socket.on("new data", function(r) {
     data = JSON.parse(r)

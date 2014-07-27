@@ -2,17 +2,21 @@ doctype html
 html
   head
     title= "Six Degrees of Wikipedia"
+    meta(charset="utf-8")
     script(src="http://code.jquery.com/jquery-1.10.1.min.js")
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js')
     script(src="http://d3js.org/d3.v3.min.js")
     link(rel='stylesheet', href='/stylesheets/circles.css')
+    meta(name="viewport", content="width=device-width, initial-scale=1")
   body
-    .col-sm-9
-        block content
-    .col-sm-3#sidebar
-        block sidebar
+    .container
+      .row
+        .col-sm-9#main
+          block content
+        .col-sm-3#sidebar
+          block sidebar
     script(src="https://cdn.socket.io/socket.io-1.0.0.js")
     script(src="http://code.jquery.com/jquery-1.11.1.js")
     block scripts

@@ -3,7 +3,12 @@ extends layout
 block content
     
 block sidebar
-    ="WORDS"
+  .row
+    .col-sm-12
+      form.form-inline(action="")
+        .form-group
+          input#article
+          button.btn.btn-primary Find
 
 block scripts
-    script(src='javascripts/radii.js')
+  script(src='javascripts/radii.js')
