@@ -2,6 +2,7 @@ var request = require('request');
 var querystring = require('querystring');
 var wp = require('wikipedia-js');
 
+// TODO Insert mongoDB caching
 var getLinkBacks = function(title, blcontinue, fn) {
   var root = "http://en.wikipedia.org/w/api.php?";
   var params = {

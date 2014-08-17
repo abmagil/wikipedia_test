@@ -1,6 +1,8 @@
-
+var TAU = 2 * Math.PI;
 var socket = io();
 var bbox, svg, target;
+var outside_scale, circle, path, circle, article_display;
+//TODO Convert to Backbone.js Model
 var articles = {
   requests: 0,
   total_articles: 0,
@@ -9,12 +11,6 @@ var articles = {
     article_ary.forEach(this.addArticle, this);
   },
   addArticle: function(article) {
-    console.log(this.article_list);
-    if (this.article_list[this.requests]) {
-      this.article_list[this.requests].push(article);
-    } else {
-      this.article_list[this.requests] = [article];
-    }
     this.total_articles++;
   },
   reset: function() {
@@ -23,34 +19,27 @@ var articles = {
     this.requests = 0;
   }
 };
+
+var initialize_shapes = function() {
+  // Represents each level of linkback
+  path = target.append("path")
+          .attr("stroke", "blue")
+          .attr("stroke-width", 2);
+  article_display = svg.append("text")
+                      .attr('transform', "translate(" + (bbox.width / 2) + "," + (bbox.height / 2) + ")")
+                      .style("text-anchor", "middle");
+};
               
 // Create svg container     
 svg = d3.select("#main").append('svg')
         .attr("height", 600)
         .attr("width", 600);
 bbox = svg[0][0].getBoundingClientRect();
-
-// Scale to keep the outermost radius on the edge of the box
-var outside_scale = d3.scale.linear()
-                      .domain([0,Math.max(bbox.width,articles.total_articles)])
-                      .range([0,bbox.width]);
-
-// Scale to keep the innermost radius equivalent to the next-smallest size
-// var inside_scale = d3.scale.linear()
-//                       .domain()
-//                       .range();
-
-
-// Path generator
-var circle = d3.svg.arc()
-              .innerRadius(0)
-              .outerRadius(function(d) {return radial_scale(d)})
-              .startAngle(0)
-              .endAngle( 2 * Math.PI);
- // Center the circles in the bounding box
-var target = svg.append('g')
+// Center the circles in the bounding box
+target = svg.append('g')
     .attr('transform', "translate(" + (bbox.width / 2) + "," + (bbox.height / 2) + ")");
 
+initialize_shapes();
 
 $("form").on("submit", function() {
     socket.emit("get article", $("#article_name").val());
@@ -64,10 +53,23 @@ socket.on("new data", function(r) {
     data = JSON.parse(r)
     if (data["query"]) {
       articles.addArticleArray(data.query.backlinks)
-      target.append("path")
-        .attr("d", circle(radial_scale(articles.total_articles)))
-        .attr("stroke", "blue")
-        .attr("stroke-width", 2)
+      
+      // continuously updated scale
+      outside_scale = d3.scale.linear()
+                        .domain([0, articles.total_articles])
+                        .range([0,Math.min(bbox.width, articles.total_articles)]);
+      // continuously updated path generator
+      circle = d3.svg.arc()
+                .innerRadius(0)
+                .outerRadius(function(d) {return outside_scale(d)})
+                .startAngle(3 * TAU / 2)
+                .endAngle( 5 * TAU / 2 );
+
+      article_display.text(articles.total_articles);
+
+      // redraw the line
+      path.transition()
+        .attr("d", circle(outside_scale(articles.total_articles)))
         .attr("fill", "none");
     }
 })
@@ -78,15 +80,18 @@ socket.on("new data", function(r) {
   $(".btn-success").removeClass("hidden");
   $(".btn-warning").removeClass("hidden");
 });
+
+// UI control
 $(".btn-warning").on("click", function() {
   $("input").val("");
   $(".btn-primary").removeClass("hidden");
   $(".btn-success").addClass("hidden");
   $(".btn-warning").addClass("hidden");
   $('#article_text').html("");
+  var path = d3.select("path");
+  path.transition().style("opacity", Number("1e-6")); // 1e-6 is the smallest number D3 can handle
   articles.reset();
-  svg.selectAll("path").remove();
-})
-
- 
-
+  path.remove();
+  article_display.remove();
+  initialize_shapes();
+});
