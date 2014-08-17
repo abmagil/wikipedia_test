@@ -26,7 +26,7 @@ var initialize_shapes = function() {
           .attr("stroke", "blue")
           .attr("stroke-width", 2);
   article_display = svg.append("text")
-                      .attr('transform', "translate(" + (bbox.width / 2) + "," + (bbox.height / 2) + ")")
+                      .attr('transform', "translate(" + (bbox.width / 2) + "," + (bbox.height / 2 - 5) + ")")
                       .style("text-anchor", "middle");
 };
               
@@ -57,14 +57,16 @@ socket.on("new data", function(r) {
       // continuously updated scale
       outside_scale = d3.scale.linear()
                         .domain([0, articles.total_articles])
-                        .range([0,Math.min(bbox.width, articles.total_articles)]);
+                        .range([0,Math.min(bbox.width / 2 - 10, articles.total_articles)]);
+
       // continuously updated path generator
       circle = d3.svg.arc()
                 .innerRadius(0)
-                .outerRadius(function(d) {return outside_scale(d)})
-                .startAngle(3 * TAU / 2)
-                .endAngle( 5 * TAU / 2 );
+                .outerRadius(outside_scale(articles.total_articles))
+                .startAngle(3 * TAU / 4)
+                .endAngle( 5 * TAU / 4 );
 
+      // Refresh displayed number of articles
       article_display.text(articles.total_articles);
 
       // redraw the line
@@ -76,17 +78,17 @@ socket.on("new data", function(r) {
 .on("found article", function(article) {
   articles.requests++;
   $('#article_text').html(article);
-  $(".btn-primary").addClass("hidden");
-  $(".btn-success").removeClass("hidden");
-  $(".btn-warning").removeClass("hidden");
+  $("#find").addClass("hidden");
+  $("#start").removeClass("hidden");
+  $("#reset").removeClass("hidden");
 });
 
 // UI control
-$(".btn-warning").on("click", function() {
+$("#reset").on("click", function() {
   $("input").val("");
-  $(".btn-primary").removeClass("hidden");
-  $(".btn-success").addClass("hidden");
-  $(".btn-warning").addClass("hidden");
+  $("#find").removeClass("hidden");
+  $("#start").addClass("hidden");
+  $("#reset").addClass("hidden");
   $('#article_text').html("");
   var path = d3.select("path");
   path.transition().style("opacity", Number("1e-6")); // 1e-6 is the smallest number D3 can handle

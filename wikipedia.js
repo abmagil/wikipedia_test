@@ -9,7 +9,7 @@ var getLinkBacks = function(title, blcontinue, fn) {
     action: "query",
     list:   "backlinks",
     bltitle: title,
-    bllimit: 300,
+    bllimit: 100,
     format: "json",
     blfilterredir: "nonredirects",
     blnamespace: 0,
