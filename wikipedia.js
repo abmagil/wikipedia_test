@@ -23,14 +23,14 @@ var getLinkBacks = function(title, blcontinue, fn) {
   };
   var endpoint = root + querystring.stringify(params);
   if (blcontinue) {
-    endpoint = endpoint + "&blcontinue=" + blcontinue // Was having trouble with unescaping the pipes that are returned in that param.  Manually add to endpoint
+    endpoint = endpoint + "&blcontinue=" + blcontinue; // Was having trouble with unescaping the pipes that are returned in that param.  Manually add to endpoint
   }
   console.log(endpoint);
   
   request.get(endpoint, function(err, res, body) {
     var parsed_json = JSON.parse(body);
     if (parsed_json["query-continue"]) { // recursively continue through the search until no more results from API
-      getLinkBacks(title, parsed_json["query-continue"]["backlinks"]["blcontinue"], fn);
+      getLinkBacks(title, parsed_json["query-continue"].backlinks.blcontinue, fn);
     }
     fn(body);
   });
@@ -51,4 +51,4 @@ var getArticle = function(query, fn) {
 module.exports = {
   getLinkBacks: getLinkBacks,
   getArticle: getArticle
-}
+};

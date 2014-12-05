@@ -22,13 +22,13 @@ io.on('connection', function(socket){
   socket.on('need data', function(msg) {
     console.log("msg: " + msg);
     wikipedia.getLinkBacks(msg, "", function(content) {
-      socket.emit("new data", content)
+      socket.emit("new data", content);
     });
   });
   socket.on('get article', function(msg) {
     wikipedia.getArticle(msg, function(content) {
       socket.emit("found article", content);
-    })
+    });
   });
   socket.on('disconnect', function(){
     console.log('user disconnected');

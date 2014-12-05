@@ -50,9 +50,9 @@ $('.btn-success').on("click", function() {
 });
 
 socket.on("new data", function(r) {
-    data = JSON.parse(r)
-    if (data["query"]) {
-      articles.addArticleArray(data.query.backlinks)
+    data = JSON.parse(r);
+    if (data.query) {
+      articles.addArticleArray(data.query.backlinks);
       
       // continuously updated scale
       outside_scale = d3.scale.linear()
