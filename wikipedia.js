@@ -1,8 +1,15 @@
+/*
+ * Engine of the site.  Responsible for querying for information.
+ */
 var request = require('request');
 var querystring = require('querystring');
 var wp = require('wikipedia-js');
 
-// TODO Insert mongoDB caching
+/*
+* Responsible for gathering and returning information about linkbacks to the given article
+* First query is to the DB and responds in the largest chunk possible
+* Second query is to the Wikipedia API 
+*/ 
 var getLinkBacks = function(title, blcontinue, fn) {
   var root = "http://en.wikipedia.org/w/api.php?";
   var params = {
